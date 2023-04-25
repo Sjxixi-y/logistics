@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class DaoUtilDruid {
+public class DruidUtil {
     // private static DruidDataSource ds;
     // 连接池对象
     private static DataSource ds;
@@ -21,7 +21,7 @@ public class DaoUtilDruid {
         Properties properties = new Properties();
         try {
             // InputStream is = new FileInputStream("src/dp.properties");
-            InputStream is = DaoUtilDruid.class.getResourceAsStream("/dp.properties");
+            InputStream is = DruidUtil.class.getResourceAsStream("/dp.properties");
             // InputStream is = Class.getClassLoader().getResourceAsStream("db.properties");
             properties.load(is);
             // 创建连接池对象
