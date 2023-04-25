@@ -13,6 +13,7 @@ import java.io.IOException;
 /**
  * 验证码生成
  */
+
 @WebServlet("/code")
 public class CodeServlet extends HttpServlet {
     @Override
