@@ -6,9 +6,7 @@ import com.sjxixi.logistics.service.impl.AdminServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -68,17 +66,61 @@ public class UserServlet extends HttpServlet {
         }
     }
 
+    /**
+     * 注册
+     *
+     * @param req  请求
+     * @param resp 响应
+     */
+    private void register(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String username = req.getParameter("username");
+        String password = req.getParameter("password");
 
-    private void register(HttpServletRequest req, HttpServletResponse resp) {
+        Admin admin = new Admin(username, password);
 
+        ias.register(admin);
+
+        // 重定向 至登录
+        resp.sendRedirect("login.html");
     }
 
-    private void login(HttpServletRequest req, HttpServletResponse resp) {
+    /**
+     * 登录
+     *
+     * @param req  请求
+     * @param resp 响应
+     */
+    private void login(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        String username = req.getParameter("username");
+        String password = req.getParameter("password");
 
+        Admin admin = ias.qry(username, password);
+
+        if (admin != null) {
+            // 保存数据
+            HttpSession session = req.getSession();
+            session.setAttribute("admin", admin);
+            // 设置 Cookie 时间
+            Cookie cookie = new Cookie("JSESSIONID", session.getId());
+            cookie.setMaxAge(60 * 30);
+            resp.addCookie(cookie);
+            // 重定向至主页
+            resp.sendRedirect(req.getContextPath() + "/index.html");
+        } else {
+            // 登录失败
+            String msg = "登录失败，请尝试重新登录";
+            req.setAttribute("msg", msg);
+            // 转发
+            req.getRequestDispatcher("login.html").forward(req, resp);
+        }
     }
 
-    private void exit(HttpServletRequest req, HttpServletResponse resp) {
-
+    private void exit(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        HttpSession session = req.getSession(false);
+        if (session != null) {
+            session.removeAttribute("admin");
+        }
+        resp.sendRedirect("login.html");
     }
 
     private void query(HttpServletRequest req, HttpServletResponse resp) {

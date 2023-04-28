@@ -105,7 +105,7 @@ public class AdminServiceImpl implements IAdminService {
     @Override
     public Admin qry(String username, int i) {
         try {
-            iDao.select(username, i);
+            return iDao.select(username, i);
         } catch (SQLException e) {
             System.out.println("据用户名精准查询时出现问题");
             e.printStackTrace();

@@ -58,6 +58,11 @@ public class Admin {
         this.state = state;
     }
 
+    public Admin(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
     public Admin(int id, String username, String password, String phone, String id_number, String name, int sex, Date birthday, String address, int permissions, int state, Date regTime) {
         this.id = id;
         this.username = username;
